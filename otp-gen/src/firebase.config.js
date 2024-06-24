@@ -7,11 +7,12 @@ const firebaseConfig = {
   projectId: "otp-gen-1ecdb",
   storageBucket: "otp-gen-1ecdb.appspot.com",
   messagingSenderId: "154587466077",
-  appId: "1:154587466077:web:8cad0b1fda6a5c4b3480b4",
-  measurementId: "G-8J4MB00DYE"
+  appId: "1:154587466077:web:8cad0b1fda6a5c4b3480b4"
+  // measurementId: "G-8J4MB00DYE"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-export const auth = getAuth(app);
+const auth = getAuth(app);
+auth.languageCode = 'en';
+export { auth };

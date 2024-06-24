@@ -1,6 +1,5 @@
 import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
-
 import OtpInput from "otp-input-react";
 import { useState } from "react";
 import PhoneInput from "react-phone-input-2";
@@ -16,43 +15,51 @@ const App = () => {
   const [showOTP, setShowOTP] = useState(false);
   const [user, setUser] = useState(null);
 
+  // Function to verify the Captcha
   function onCaptchVerify() {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: (response) => {
-            onSignup();
-          },
-          "expired-callback": () => {},
-        },
-        auth
-      );
+    try {
+      if (!window.RecaptchaVerifier) {
+        window.recaptchaVerifier = new RecaptchaVerifier(
+          auth,
+          "recaptcha-container",
+          {
+            size: "normal",
+            callback: (response) => {
+              onSignup();
+            },
+            "expired-callback": () => { },
+          }
+        );
+      }
+    }
+    catch (e) { }
+  }
+
+  // Function to handle signup process
+  function onSignup() {
+    try {
+      setLoading(true);
+      onCaptchVerify();
+      const appVerifier = window.recaptchaVerifier;
+      const formatPh = "+" + ph;
+
+      signInWithPhoneNumber(auth, formatPh, appVerifier)
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+          setLoading(false);
+          setShowOTP(true);
+          toast.success("OTP sent successfully!");
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+    } catch (error) {
+      console.log(error)
     }
   }
 
-  function onSignup() {
-    setLoading(true);
-    onCaptchVerify();
-
-    const appVerifier = window.recaptchaVerifier;
-
-    const formatPh = "+" + ph;
-
-    signInWithPhoneNumber(auth, formatPh, appVerifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setLoading(false);
-        setShowOTP(true);
-        toast.success("OTP sended successfully!");
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  }
-
+  // Function to handle OTP verification
   function onOTPVerify() {
     setLoading(true);
     window.confirmationResult
