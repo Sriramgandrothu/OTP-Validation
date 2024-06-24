@@ -82,12 +82,12 @@ const App = () => {
         <div id="recaptcha-container"></div>
         {user ? (
           <h2 className="text-center text-white font-medium text-2xl">
-            👍Login Success
+            Developed by Sriram <br /> Helped by Teja
           </h2>
         ) : (
           <div className="w-80 flex flex-col gap-4 rounded-lg p-4">
             <h1 className="text-center leading-normal text-white font-medium text-3xl mb-6">
-              Welcome to <br /> OTP VERIFICATION TESTER
+              Welcome to <br /> OTP TESTER
             </h1>
             {showOTP ? (
               <>
